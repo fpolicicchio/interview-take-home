@@ -41,13 +41,9 @@ export default async function handler(
         user.email = req.body.email;
       }
 
-      if (req.body.name) {
-        user.name = req.body.name;
-      }
+      user.name = req.body.name;
 
-      if (req.body.phone) {
-        user.phone = req.body.phone;
-      }
+      user.phone = req.body.phone;
 
       const success = await db.updateUser(user.id, user);
 

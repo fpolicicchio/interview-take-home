@@ -64,8 +64,16 @@ export default function Home() {
     setFormData(prev => ({ ...prev, phone: value }));
   }, []);
 
+  const handleClearField = (fieldName: string) => {
+    setFormData(prev => ({ ...prev, [fieldName]: '' }));
+  };
+
   const handleSubmit = useCallback(async () => {
     try {
+      //const cleanData = Object.fromEntries(
+      //  Object.entries(formData).filter(([key, value]) => value !== undefined && value !== ''),
+      //);
+
       const response = await updateUser(formData);
   
       if (response.error) {
@@ -103,8 +111,9 @@ export default function Home() {
                   label="Full name"
                   autoComplete="name"
                   onChange={handleNameChange}
-                  value={formData.name}
+                  value={formData.name || ''}
                 />
+                <Button onClick={() => handleClearField('name')}>Clear</Button>
                 <TextField
                   type="email"
                   label="Email"
@@ -117,8 +126,9 @@ export default function Home() {
                   label="Phone"
                   autoComplete="phone"
                   onChange={handlePhoneChange}
-                  value={formData.phone}
+                  value={formData.phone || ''}
                 />
+                <Button onClick={() => handleClearField('phone')}>Clear</Button>
               </FormLayout>
             </Card>
           </Layout.AnnotatedSection>

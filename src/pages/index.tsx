@@ -29,14 +29,14 @@ export default function Home() {
   });
 
   const { mutateAsync: updateUser, isLoading: isUserUpdating } = useMutation(
-    async ({ email, name }: { email: string; name: string }) => {
+    async ({ email, name, phone }: { email: string; name: string; phone: string }) => {
       const response = await fetch('/api/user', {
         headers: {
           Authorization: `Basic ${AUTH_TOKEN}`,
           'Content-Type': 'application/json',
         },
         method: 'PUT',
-        body: JSON.stringify({ email, name }),
+        body: JSON.stringify({ email, name, phone }),
       });
       const data = await response.json();
 
@@ -49,7 +49,7 @@ export default function Home() {
     },
   );
 
-  const [formData, setFormData] = useState({ email: '', name: '' });
+  const [formData, setFormData] = useState({ email: '', name: '', phone: '' });
   const [error, setError] = useState('');
 
   const handleNameChange = useCallback((value: string) => {
@@ -60,8 +60,11 @@ export default function Home() {
     setFormData(prev => ({ ...prev, email: value }));
   }, []);
 
+  const handlePhoneChange = useCallback((value: string) => {
+    setFormData(prev => ({ ...prev, phone: value }));
+  }, []);
+
   const handleSubmit = useCallback(async () => {
-    //await updateUser(formData);
     try {
       const response = await updateUser(formData);
   
@@ -76,15 +79,12 @@ export default function Home() {
 
   }, [updateUser, formData]);
 
-  //const TextFieldWithValidation = ({ error, ...props }) => (
-  //  <TextField {...props} error={error} />
-  //);
-
   useEffect(() => {
     if (!isLoading) {
       setFormData({
         email: data?.user.email || '',
         name: data?.user.name || '',
+        phone: data?.user.phone || '',
       });
     }
   }, [isLoading, data]);
@@ -112,6 +112,12 @@ export default function Home() {
                   onChange={handleEmailChange}
                   value={formData.email}
                   error={error}
+                />
+                <TextField
+                  label="Phone"
+                  autoComplete="phone"
+                  onChange={handlePhoneChange}
+                  value={formData.phone}
                 />
               </FormLayout>
             </Card>

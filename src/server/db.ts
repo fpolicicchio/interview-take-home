@@ -7,6 +7,7 @@ export interface DataModel {
     id: string;
     email: string;
     name: string;
+    phone: string;
     shopId: string;
     token: string;
   }[];
@@ -28,6 +29,7 @@ class Database {
           id: '1',
           email: 'person-1@company-z.com',
           name: 'Person 1',
+          phone: '123-456-7890',
           shopId: '2',
           token: 'fake-user-1-token',
         },

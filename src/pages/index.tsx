@@ -50,6 +50,7 @@ export default function Home() {
   );
 
   const [formData, setFormData] = useState({ email: '', name: '' });
+  const [error, setError] = useState('');
 
   const handleNameChange = useCallback((value: string) => {
     setFormData(prev => ({ ...prev, name: value }));
@@ -60,8 +61,24 @@ export default function Home() {
   }, []);
 
   const handleSubmit = useCallback(async () => {
-    await updateUser(formData);
+    //await updateUser(formData);
+    try {
+      const response = await updateUser(formData);
+  
+      if (response.error) {
+        setError(response.error);
+      } else {
+        setError('');
+      }
+    } catch (error) {
+      console.error('Error updating email:', error);
+    }
+
   }, [updateUser, formData]);
+
+  //const TextFieldWithValidation = ({ error, ...props }) => (
+  //  <TextField {...props} error={error} />
+  //);
 
   useEffect(() => {
     if (!isLoading) {
@@ -94,6 +111,7 @@ export default function Home() {
                   autoComplete="email"
                   onChange={handleEmailChange}
                   value={formData.email}
+                  error={error}
                 />
               </FormLayout>
             </Card>

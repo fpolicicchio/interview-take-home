@@ -1,5 +1,6 @@
 import db from '@/server/db';
 import type { NextApiRequest, NextApiResponse } from 'next';
+import validator from 'validator';
 
 export default async function handler(
   req: NextApiRequest,
@@ -32,6 +33,11 @@ export default async function handler(
       }
 
       if (req.body.email) {
+        const isValidEmail = validator.isEmail(req.body.email);
+        if (!isValidEmail) {
+          res.status(422).json({ error: 'Invalid email format' });
+          return;
+        }
         user.email = req.body.email;
       }
 

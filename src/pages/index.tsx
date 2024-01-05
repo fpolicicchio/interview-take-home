@@ -10,6 +10,8 @@ import {
 } from '@shopify/polaris';
 import { useCallback, useEffect, useState } from 'react';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const AUTH_TOKEN = 'fake-user-1-token';
 
@@ -70,19 +72,16 @@ export default function Home() {
 
   const handleSubmit = useCallback(async () => {
     try {
-      //const cleanData = Object.fromEntries(
-      //  Object.entries(formData).filter(([key, value]) => value !== undefined && value !== ''),
-      //);
-
       const response = await updateUser(formData);
   
       if (response.error) {
-        setError(response.error);
+        toast.error(response.error, { position: toast.POSITION.TOP_CENTER });
       } else {
-        setError('');
+        toast.success('User updated successfully!', { position: toast.POSITION.TOP_CENTER });
       }
     } catch (error) {
       console.error('Error updating email:', error);
+      toast.error('An error occurred while updating. Please try again.');
     }
 
   }, [updateUser, formData]);
@@ -106,6 +105,7 @@ export default function Home() {
             description="Abra will use this as your account information."
           >
             <Card>
+              <ToastContainer />
               <FormLayout>
                 <TextField
                   label="Full name"
